@@ -1,0 +1,35 @@
+{% extends "index.html" %}
+
+{% block breadcrumbs %}
+  <ul id="breadcrumbs">
+    <li><a href="/">{{config.title}}</a>&nbsp;/&nbsp;</li>
+    <li>Blog <a href="/{{ taxonomy.name }}/">{{ taxonomy.name }}</a>&nbsp;:&nbsp;</li>
+    <li>{{ term.name }}</li>
+  </ul>
+{% endblock breadcrumbs %}
+
+{% block content %}
+
+    {% for page in term.pages %}
+      {{ macro::article(page=page) }}
+    {% endfor %}
+  
+{% endblock content %}
+
+{% block aside %}
+
+  <div id="trees">
+
+    {% set tags = get_taxonomy(kind="tags") %}
+
+    <input class="tree-toggle" type="checkbox" id="tree-toggle-03" checked />
+    <label class="tree-toggle-label" for="tree-toggle-03">Blog tags</label>
+    <ul class="subtree">
+         {% for tag in tags.items %}    
+         <li><a href="{{tag.permalink}}" {% if current_url == tag.permalink %}class="active"{% endif %}  >{{tag.name}}</a></li>
+         {% endfor %}
+      </ul>
+
+    </div>
+
+{% endblock aside %}

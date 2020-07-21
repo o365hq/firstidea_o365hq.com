@@ -1,0 +1,89 @@
+<!-- macro for taxonomy -->
+{% macro list(terms) %}
+{% if terms %}
+<h1>{{ taxonomy.name }}</h1>
+    <ul id="tax_list">
+    {% for term in terms %}
+      <li><a href="{{ term.permalink | safe }}">{{ term.name }}</a>&nbsp;[{{ term.pages | length }}]</li>
+    {% endfor %}
+    </ul>
+    <select id="mobile" onChange="window.location.href=this.value" name="Taxonomies" >
+      <option disabled selected>{{ taxonomy.name }}</option>
+      {% for term in terms %}
+      <option value="{{ term.permalink | safe }}">{{ term.name }}&nbsp;[{{ term.pages | length }}]</option> 
+      {% endfor %}
+    </select>
+  {% endif %}
+{% endmacro list %}
+
+<!-- macro services card -->
+
+{% macro services(page) %}
+ 
+    <div class="service_card {% if page.taxonomies.products %}{% for product in page.taxonomies.products %}{{ product | slugify | replace(from="-", to="") }}{% endfor %}{% endif %}  {% if page.taxonomies.types %}{% for type in page.taxonomies.types %}{{ type | slugify | replace(from="-", to="") }}{% endfor %}{% endif %}">
+
+        <ul class="defines">
+            {% if page.extra.sku %}<li>{{ page.extra.sku }}</li>{% endif %}
+            {% if page.extra.duration %} <li>{{ page.extra.duration }}</li>{% endif %}
+            {% if page.extra.price %}<li>{{ page.extra.price }}</li>{% endif %}
+        </ul>
+
+        <h3><a href="{{ page.permalink }}">{{ page.title }}</a></h3>
+        <p>{{ page.description | truncate(length=120)}}</p>
+          
+        {% if page.taxonomies.types %}
+            {% for type in page.taxonomies.types %}
+              <a href="{{ get_taxonomy_url(kind="types", name=type) | safe }}" >{{ type }}</a>
+            {% endfor %}
+        {% endif %}
+   
+        {% if page.taxonomies.products %}
+          {% for product in page.taxonomies.products %}
+           <a href="{{ get_taxonomy_url(kind="products", name=product) | safe }}" >{{ product }}</a>
+          {% endfor %}
+        {% endif %}
+</div>     
+{% endmacro services %}
+
+{% macro list_articles(pages) %}
+    {% for page in pages %}
+        {{ self::article(page=page) }}
+    {% endfor %}
+{% endmacro list_articles %}
+
+{% macro paginate(paginator) %}
+            <div id="paginator">
+                {% if paginator.previous %}    
+                <a href="{{ paginator.previous }}">&laquo; Previous</a>
+                {% else %}
+                <a disabled title="This is the first page">&laquo;
+                    Previous</a>
+                {% endif %}
+                <ul>
+                    <li>Page {{ paginator.current_index }} of {{ paginator.number_pagers }}</li>
+                </ul>
+                {% if paginator.next %}
+                <a href="{{ paginator.next }}">Next &raquo;</a>
+                {% else %}
+                <a disabled title="This is the last page">Next &raquo;</a>
+                {% endif %}
+            </div>
+{% endmacro paginate %}
+
+{% macro article(page) %}
+<article>
+    <div>
+    {% if page.date %}
+        <date>{{ page.date }}</date>
+    {% endif %}
+        <h3><a href="{{ page.permalink | safe }}">{{ page.title }}</a></h3>
+    </div>
+    {% if page.description %}
+        <p>{{ page.description | safe }}</p>
+    {% endif %}
+    <ul id="tags_article">
+    {% if page.taxonomies.tags %}{% for tag in page.taxonomies.tags %}{% if loop.last %}<li><a href="{{ get_taxonomy_url(kind="tags", name=tag) | safe }}" >{{ tag }}</a>;</li>
+    {% else %}<li><a href="{{ get_taxonomy_url(kind="tags", name=tag) | safe }}" >{{ tag }}</a>,</li>{% endif %}{% endfor %}{% endif %}
+    </ul>
+</article>
+{% endmacro article %}

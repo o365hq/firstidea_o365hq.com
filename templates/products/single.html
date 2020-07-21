@@ -1,0 +1,47 @@
+{% extends "index.html" %}
+
+{% block breadcrumbs %}
+  <ul id="breadcrumbs">
+    <li><a href="/">{{config.title}}</a>&nbsp;/&nbsp;</li>
+    <li>Services by <a href="/{{ taxonomy.name }}/">{{ taxonomy.name }}</a>&nbsp;:&nbsp;</li>
+    <li>{{ term.name }}</li>
+  </ul>
+{% endblock breadcrumbs %}
+
+{% block content %}
+<h2>{{ term.name }}</h2>
+
+  {% for page in term.pages %}
+    {{ macro::services(page=page) }}
+  {% endfor %}
+
+{% endblock content %}
+
+{% block aside %}
+
+<div id="trees">
+
+  {% set types = get_taxonomy(kind="types") %}
+
+  <input class="tree-toggle" type="checkbox" id="tree-toggle-01" />
+  <label class="tree-toggle-label" for="tree-toggle-01">Services by types</label>
+
+  <ul class="subtree">
+     {% for type in types.items %}    
+      <li><a href="{{type.permalink}}" >{{type.name}}</a></li> 
+     {% endfor %}
+    </ul>
+
+     {% set products = get_taxonomy(kind="products") %}
+
+  <input class="tree-toggle" type="checkbox" id="tree-toggle-02"  checked />
+  <label class="tree-toggle-label" for="tree-toggle-02">Services by products</label>
+  <ul class="subtree">
+       {% for product in products.items %}    
+       <li><a href="{{product.permalink}}"  {% if current_url == product.permalink %}class="active"{% endif %} >{{product.name}}</a></li>
+       {% endfor %}
+    </ul>
+
+  </div>
+
+{% endblock aside %}

@@ -1,0 +1,167 @@
+{% import "macro.html" as macro %}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta http-equiv="content-type" content="text/html; charset=utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+      <title>{% block title %}{{ config.title }}{% endblock title %}</title>     
+      <link rel="stylesheet" href="{{ get_url(path="main.css") | safe }}">
+    </head>
+
+    <body>
+
+  {% block global_nav %} 
+  <header>
+   
+    <div id="first_line">
+      <a href="javascript:void(0);" onclick="burger()" id="mobile"></a>
+      <a href="/"><h1>IT Partner</h1></a>
+      
+      <form class="theme-selector">
+        <button type="button" id="theme-light-button" class="theme-button  ms-Icon--Lightbulb" onclick="enableTheme('light', true)"></button>
+        <button type="button" id="theme-dark-button"  class="theme-button enabled  ms-Icon--Lightbulb" onclick="enableTheme('dark', true)"></button>
+      </form>   
+    </div>
+
+      {% set path = current_path | truncate(length=3, end="") %}
+        <ul id="global_nav">
+          <li id="search-ico" class="ms-Icon--Search"></li>
+          <li {% if path == 'ser' %}class="active"{% endif %}><a href="/services/">Services</a></li>
+          <li {% if path == 'blo' %}class="active"{% endif %}><a href="/blog/">Blog</a></li>
+          <li {% if path == 'por' %}class="active"{% endif %}><a href="/portfolio/">Portfolio</a></li>
+          <li {% if path == 'FAQ' %}class="active"{% endif %}><a href="/faq/">FAQ</a></li>
+          <li {% if path == 'abo' %}class="active"{% endif %}><a href="/about/">About</a></li>
+          <li {% if path == 'con' %}class="active"{% endif %}><a href="/contacts/">Contacts</a></li>
+        </ul>
+                
+        <div class="search-container">
+          <input id="search" type="search" placeholder="search..">
+            <div class="search-results">
+              <div class="search-results__header"></div>
+                <ul class="search-results__items"></ul>
+              </div>
+            </div>
+
+  </header>
+  {% endblock global_nav %}
+  
+  <div id="wrap">
+  <main>
+    <section>
+    {% block breadcrumbs %}{% endblock breadcrumbs %}
+
+    {% block content %}
+
+    <h2>Services</h2>
+        {% set s = get_section(path="services/_index.md") %}
+        {% for page in s.pages | reverse  | slice(end=6) %}
+          {{ macro::services(page=page) }}
+        {% endfor %}
+   
+      <h2>Blog</h2>
+          {% set b = get_section(path="blog/_index.md") %}
+          {% for page in b.pages | slice(end=5) %}
+            {{ macro::article(page=page) }}
+          {% endfor %}
+ 
+      <h2>Portfolio</h2>
+        {% set p = get_section(path="portfolio/_index.md") %}
+        {% for page in p.pages | reverse  | slice(end=3) %}
+         {{ macro::article(page=page) }}
+        {% endfor %}
+   
+      {% endblock content %}
+    </section>
+
+    <aside>
+      {% block aside %}
+    <div class="promo_card">
+      <h4><i class="ms-Icon--Telemarketer"></i>&nbsp;<a href="https://898.tv/ITP365">Get Support</a></h4>
+      <p>Link for our customers. Do you want to get fast remote support? <a href="/services">Pick up our service</a></p>
+    </div>
+
+    <div class="promo_card">
+     <h4><i class="ms-Icon--ShoppingCart"></i>&nbsp;<a href="http://buymssoft.com/">Microsoft Licensing Store</a></h4>
+     <p>Looking for Microsoft Software for the best price?</p>
+    </div>
+      
+      <ul>
+        <li class="mail">&nbsp;info@o365hq.com</li>
+        <li class="phone">&nbsp;USA: +1 (844) 611-6871</li>
+        <li class="phone">&nbsp;AU: +61 (285) 996-162</li>
+        <li class="phone">&nbsp;UK: 44 (208) 078-6089</li>
+      </ul>
+
+      <div id="trees">
+
+        {% set types = get_taxonomy(kind="types") %}
+
+        <input class="tree-toggle" type="checkbox" id="tree-toggle-01" />
+        <label class="tree-toggle-label" for="tree-toggle-01">Services by types</label>
+
+        <ul class="subtree">
+           {% for type in types.items %}    
+            <li><a href="{{type.permalink}}">{{type.name}}</a></li> 
+           {% endfor %}
+          </ul>
+  
+           {% set products = get_taxonomy(kind="products") %}
+
+        <input class="tree-toggle" type="checkbox" id="tree-toggle-02" />
+        <label class="tree-toggle-label" for="tree-toggle-02">Services by products</label>
+        <ul class="subtree">
+             {% for product in products.items %}    
+             <li><a href="{{product.permalink}}">{{product.name}}</a></li>
+             {% endfor %}
+          </ul>
+
+          {% set tags = get_taxonomy(kind="tags") %}
+
+          <input class="tree-toggle" type="checkbox" id="tree-toggle-03" />
+          <label class="tree-toggle-label" for="tree-toggle-03">Blog tags</label>
+          <ul class="subtree">
+               {% for tag in tags.items %}    
+               <li><a href="{{tag.permalink}}">{{tag.name}}</a></li>
+               {% endfor %}
+            </ul>
+
+
+        </div>
+      
+      {% endblock aside %}
+    </aside>
+     
+      </main>
+
+
+      <footer>
+          <ul> 
+            <li>&copy; IT Partner, LLC</li>
+            <li>3422 Old Capitol Trail Ste.679, Wilmington, DE 19808</li>
+            <li>info@o365hq.com</li>
+            <li>+1 (844) 611-6871</li>
+          </ul>
+          <img src="https://o365hq.com/images/720.png" alt="MPN Member" />
+      </footer>
+
+      <script src="{{ get_url(path="themes.js") | safe }}"></script>
+
+      <script src="{{ get_url(path="elasticlunr.min.js") | safe }}" defer></script>
+      <script src="{{ get_url(path="search_index.en.js") | safe }}" defer></script>
+      <script src="{{ get_url(path="search.js") | safe }}" defer></script>
+
+      <script>
+        function burger() {
+          var x = document.getElementById("global_nav");
+          if (x.style.display === "block") {
+            x.style.display = "none";
+          } else {
+            x.style.display = "block";
+          }
+        }
+        </script>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,12 @@
+base_url = "/"
+compile_sass = true
+title = "IT Partner"
+highlight_code = true
+highlight_theme = "kronuz"
+build_search_index = true
+
+taxonomies = [
+    {name = "tags", rss = true},
+    {name = "products", rss = false},
+    {name = "types", rss = false}
+]

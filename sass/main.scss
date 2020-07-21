@@ -1,0 +1,754 @@
+@charset "utf-8";
+
+* {
+  padding:0;
+  margin: 0;
+  }
+  
+  ::selection {
+    background: blue;
+    color: #fafafa;
+  }
+
+  html {
+    font-kerning: normal;
+    text-rendering: optimizeLegibility;
+    scroll-behavior: smooth;
+    }
+
+    $theme-light-first-text-color: #252423;
+    $theme-dark-first-text-color: #c8c6c4;
+    $theme-light-bg-color:#faf9f8;
+    $theme-dark-bg-color:#1b1a19;
+
+    $theme-dark-bg-aside:#201f1e;
+    $theme-light-bg-aside:#fff;
+
+    $theme-light-first_line: #201f1e;
+    $theme-dark-first_line:#111;
+    $theme-light-first_line-text:#edebe9;
+    $theme-dark-first_line-text:#c8c6c4;
+
+    $theme-light-shadow: 0 4px 8px -1px rgba(0,0,0,.1); 
+    $theme-dark-shadow: 0 4px 8px -1px rgba(0,0,0,.5);
+
+    $theme-light-cardshadow:0 2px 4px rgba(0,0,0,.1);
+    $theme-dark-cardshadow:0 2px 4px rgba(0,0,0,.5);
+  
+    @mixin color($property, $var, $fallback){
+      #{$property}: $fallback; 
+      #{$property}: var($var, $fallback);
+    }
+  
+    .theme-dark {
+      --first-text-color: #{$theme-dark-first-text-color};
+      --bg-color: #{$theme-dark-bg-color};
+      --bg-aside: #{$theme-dark-bg-aside};
+      --first_line: #{$theme-dark-first_line};
+      --first_line-text: #{$theme-dark-first_line-text};
+      --shadow: #{$theme-dark-shadow};
+      --cardshadow: #{$theme-dark-cardshadow};
+    }
+
+$baseline: 1.375rem;
+$minussize: 0.8125rem;
+$size: 0.9375rem;
+$plussize: 1.75rem;
+
+body {
+  text-rendering: optimizeLegibility;
+  font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif;
+  @include color(background, --bg-color,  $theme-light-bg-color);
+  @include color(color, --first-text-color, $theme-light-first-text-color);
+  transition-property: all;
+  transition-duration: 0.1s;
+  transition-timing-function: ease-out;
+  overflow-x: hidden;
+  font-size:$size;
+}
+
+.theme-button{
+  display: none;
+  padding:0;
+  border:none;
+  background: transparent;
+  cursor: pointer;
+  font-family: 'FabricMDL2Icons';
+  font-size:$size;
+  @include color(color, --first_line-text,  $theme-light-first_line-text);
+
+  &:not(:hover){
+    border-bottom-color: transparent;
+  }
+}
+
+.theme-button.enabled{
+  display: inline;
+}
+
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+
+  50% {
+    opacity: 0.8;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+.active {
+  font-weight: bold;
+  border-bottom:2px solid rgb(0, 120, 212);
+}
+
+pre {
+  overflow: auto;
+  font:1rem Consolas, monospace;
+  padding:1rem;
+  margin:0 0 1rem 0;
+  border-radius: 4px;
+}
+
+a:link {
+  text-decoration: none;
+  color:royalblue;
+}
+
+a:hover {
+ 
+}
+
+a:visited {
+  color:royalblue;
+}
+
+h1, h2, h3, h4, h5 {
+  .anchor {
+    visibility: hidden;
+    text-decoration: none;
+    border-bottom-color: transparent;
+    cursor: pointer;
+    padding-left:calc(#{$baseline} / 2);
+    color:#605e5c;
+  }
+
+  &:hover {
+    .anchor {
+      visibility: visible;
+    }
+  }
+}
+
+#wrap {
+  animation: fade-in 0.4s ease-in-out;
+}
+
+header {
+  display: flex;
+  flex-flow: column nowrap;
+ 
+  #first_line {
+    @include color(background, --first_line,  $theme-light-first_line);
+    @include color(color, --first_line-text,  $theme-light-first_line-text);
+    padding:calc(#{$baseline} / 2) $baseline;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+    align-items: flex-end;
+
+    img {
+      width: $baseline;
+    }
+  }
+
+  h1 {
+    font-size:1.25rem;
+    font-weight: 300;
+    @include color(color, --first_line-text,  $theme-light-first_line-text);
+  }  
+   
+  #global_nav {
+    display:flex;
+    flex-flow:row wrap;
+    list-style:none;
+    justify-content: space-between;
+    @include color(box-shadow, --shadow, $theme-light-shadow);
+    padding:calc(#{$baseline} / 2) $baseline;
+    transition: opacity 1s ease 0s; 
+    z-index:2;
+    position: relative;
+   
+  
+   li a:link, li a:visited {@include color(color, --first-text-color, $theme-light-first-text-color);}
+   li a:hover { border-bottom: 2px solid blue;}
+  }
+}
+
+nav {
+  opacity: 1;
+  transition: opacity 0.167s ease 0s; 
+}
+
+main {
+  display: flex;
+  flex-flow: row-reverse wrap;
+  justify-content: flex-end;
+}
+
+#breadcrumbs {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-flow:row wrap;
+  list-style: none;
+  margin: $baseline 0;
+  text-transform: uppercase;
+  font-size:$minussize;
+}
+
+#types {
+  display: flex;
+  flex-flow:row wrap;
+  justify-content: space-between;
+  list-style:none;
+  margin:$baseline $baseline $baseline 0;
+  grid-column: 1 / -1;
+}
+
+$minimax: minmax(300px, 1fr);
+
+section {
+  padding-left:$baseline;
+  width: calc(100% - 23rem);
+  display: grid;
+  grid-template-columns: repeat(auto-fill, $minimax);
+  grid-gap: $baseline;
+  align-self: start;
+
+  h1 {
+    font-weight: 400;
+    font-size:$plussize;
+    margin: $baseline 0 0;
+    grid-column: 1 / 3;
+    text-transform:capitalize;
+  }
+
+  #inpost {
+    grid-column: 1 / 3;
+    margin:0;
+  }
+
+  h2 {
+    font-size:$plussize;
+    font-weight: 600;
+    margin:$baseline 0 0;
+    grid-column: 1 / -1;
+  }
+}
+
+#taxonomies ul {
+  list-style: none;
+}
+
+aside {
+  width:20rem;
+  min-height: 80vh;
+  @include color(background, --bg-aside,  $theme-light-bg-aside);
+  z-index:1;
+  position: relative;
+
+  .mail::before {
+    font-family: 'FabricMDL2Icons';
+    content: "\E715";
+    font-size:120%;
+  }
+
+  .phone::before {
+    font-family: 'FabricMDL2Icons';
+    content: "\E77E";
+    font-size:120%;
+  }
+
+  h2 {
+    margin:$baseline 0 0 $baseline;
+    font-size:$plussize;
+ 
+  }
+
+  h3 {
+    margin:$baseline $baseline 0 $baseline;
+    font-size:$size;
+  }
+  
+  ul {
+    margin:0 0 0 $baseline;
+    list-style:none;
+  }
+
+  .active {
+    font-weight: bold;
+    border:none;
+  }
+}
+
+.app form {
+  display: flex;
+  flex-flow: column nowrap; 
+  margin:$baseline;
+
+  button {
+    cursor: pointer;
+  }
+
+  .form__error {
+    color: red;
+    text-align: left;
+    font-size: 12px;
+    display: block;
+    margin-top: 3px;
+    display: none;
+  }
+
+  input, button {
+    margin:calc(#{$baseline} / 2) 0;
+    padding:calc(#{$baseline} / 2);
+    font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif;
+    font-size: $minussize;
+    @include color(background, --bg-color,  $theme-light-bg-color);
+    @include color(color, --first-text-color, $theme-light-first-text-color);
+    border:2px solid #605e5c;
+    border-radius: 1px;
+  }
+  
+  input:focus {
+    border:2px solid rgb(0, 120, 212);
+  }
+
+  input:valid:not(:placeholder-shown) {
+    border-color: green;
+  }
+  
+  input:invalid:not(:placeholder-shown) {
+    border-color: red;
+  }
+
+  input:invalid:not(:placeholder-shown) + .form__error {
+    display: block;
+  }
+}
+
+.promo_card {
+  display: block;
+  @include color(background, --bg-aside,  $theme-light-bg-aside);
+  @include color(box-shadow, --shadow, $theme-light-shadow);
+  border-radius: 2px;
+  margin:$baseline;
+  padding:$baseline;
+  font-size: $minussize;
+
+    i {
+      font-family: 'FabricMDL2Icons';
+      font-style: normal;
+    }
+
+    ul {
+      margin:0;
+      list-style: none;
+    }
+}
+
+  @keyframes slideIn {
+    0% {
+      max-height: 0;
+      opacity: 0;
+    }
+  
+    100% {
+      max-height: 999px;
+      opacity: 1;
+    }
+  }
+  
+  @keyframes slideOut {
+    0% {
+      height: auto;
+      opacity: 1;
+    }
+  
+    100% {
+      height: 0;
+      opacity: 0;
+    }
+  }
+  
+#trees {
+    margin:$baseline 0;
+
+    label {
+      display: block;
+      margin:0 $baseline;
+      padding: calc(#{$baseline} /2) 0;
+      border-width:0 0 1px 0;
+      border-style: solid;
+      @include color(border-color, --bg-color, $theme-light-bg-color);
+    }
+  }
+
+.subtree {
+  overflow: hidden;
+  transition: all 0.2s ease-in-out;
+  margin-bottom: 0;
+}
+
+.tree-toggle-label {
+  user-select: none;
+  cursor: pointer;
+  &::before {
+    display: inline-block;
+    content: "\E970";
+    font-family: 'FabricMDL2Icons';
+    margin-left: 8px;
+    transform: rotate(0deg);
+    transform-origin: 50% 50% 0px;
+    transition: transform 0.1s linear 0s;
+  }
+
+  &:hover {
+    @include color(background, --bg-color, $theme-light-bg-color);  }
+}
+
+.tree-toggle {
+  position: absolute;
+  opacity: 0;
+  z-index: -1;
+}
+
+.tree-toggle:checked + .tree-toggle-label::before {
+  content: "\E970";
+  font-family: 'FabricMDL2Icons';
+  transform: rotate(90deg);
+  transform-origin: 50% 50% 0px;
+  transition: transform 0.1s linear 0s;
+}
+
+.tree-toggle:checked + .tree-toggle-label {
+  font-weight: bold;
+}
+
+.tree-toggle + .tree-toggle-label + .subtree {
+  animation-name: slideOut;
+  animation-duration: 0.25s;
+  animation-fill-mode: both;
+}
+
+.tree-toggle:checked + .tree-toggle-label + .subtree {
+  animation-name: slideIn;
+  animation-duration: 0.25s;
+  animation-fill-mode: both;
+}
+
+  .subtree li {
+    display:block;
+    margin:0 $baseline;
+    padding: calc(#{$baseline} /2) $baseline;
+    border-width:0 0 1px 0;
+    border-style: solid;
+    @include color(border-color, --bg-color, $theme-light-bg-color);
+
+    &:hover {
+      @include color(background, --bg-color, $theme-light-bg-color);  }
+  }
+
+
+  article {
+   display: flex;
+   flex-flow:column nowrap;
+   line-height: 1.5;
+   align-items: flex-start; 
+   grid-column: 2 / -1;
+   
+
+   date {
+    color:#605e5c;
+    font-size:$minussize;
+   }
+
+   h3 {
+    font-size:19px;
+    font-weight: 400;
+    line-height: 1.2;
+    margin:calc(#{$baseline} / 2)  $baseline calc(#{$baseline} / 2)  0;
+    }
+
+    ul, ol {
+      list-style-position: outside;
+      margin:0 0 calc(#{$baseline} / 2) calc(#{$baseline} *2);
+    }
+  }
+
+  #tags_article li::before {
+    content: "\E8EC";
+    font-family: 'FabricMDL2Icons';
+    color:#605e5c;
+    font-size:150%;
+    align-self: flex-start;
+    margin-right:0.1rem;
+  }
+
+  #tags_article {
+    font-size: $minussize;
+    display: flex;
+    flex-flow: row wrap;
+    list-style:none;
+    margin:calc(#{$baseline} / 2) 0 0;
+
+    li {
+      display: flex;
+      margin:0 calc(#{$baseline} / 2) 0 0;
+    }
+  }
+
+  #post {
+    
+    display: flex;
+    flex-flow: column nowrap;
+    
+    img {
+      max-width:100%;
+    }
+
+    h3 {
+      margin:calc(#{$baseline} / 2) 0;
+    }
+
+    p {
+      grid-column: 5 / 2;
+      margin:0 0 $baseline 0;
+    }
+
+    ul {
+      list-style-type: circle;
+    }
+
+    ol {
+      list-style-type: decimal;
+    }
+  }
+
+  #description {
+   grid-column: 1 / -1 ;
+    font-size: 120%;
+    line-height: 1.5;
+  }
+
+  .sharepointonline::before {
+    font-family: 'FabricMDL2Icons';
+    content: "\F27E";
+    font-size:200%;
+  }  
+
+  .microsoftazure::before  {
+    font-family: 'FabricMDL2Icons';
+    content: "\EB6A";
+    font-size:200%;
+  }
+
+  .microsoftteams::before  {
+    font-family: 'FabricMDL2Icons';
+    content: "\F40A";
+    font-size:200%;
+  }
+
+  .office365::before  {
+    font-family: 'FabricMDL2Icons';
+    content: "\EB6E";
+    font-size:200%;
+  }
+
+  .exchangeonline::before {
+    font-family: 'FabricMDL2Icons';
+    content: "\F284";
+    font-size:200%;
+  }
+
+  .dynamics365::before {
+    font-family: 'FabricMDL2Icons';
+    content: "\EDCC";
+    font-size:200%;
+  }
+
+
+  .service_card {
+    @include color(box-shadow, --shadow, $theme-light-shadow);
+    border-radius: 2px;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+    align-items: flex-start;
+    @include color(background, --bg-aside,  $theme-light-bg-aside);
+    padding:$baseline;
+    list-style:none;
+    opacity: 1;
+    transition: opacity 0.2s ease-in-out;
+  
+    h3 {
+      font-weight: 400;
+      margin:calc(#{$baseline} / 2) 0;
+      width:100%;
+    }
+
+    p {
+      margin:0 0 calc(#{$baseline} / 2) 0;
+    }
+
+  .defines {
+    text-transform: uppercase;
+    list-style: none;
+    color:#605e5c;
+    font-size: $minussize;
+  } 
+  }
+
+  .rotate {
+    position: absolute;
+    clip: rect(0 0 0 0);
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    opacity: 0;
+   }
+
+#paginator {
+  grid-column: 1 / -1 ;
+  display: flex;
+  flex-flow: row wrap;
+  margin:$baseline 0;
+
+  a {
+    margin: 0 calc(#{$baseline} / 2);
+  }
+
+  ul {
+    list-style: none;
+  }
+}
+
+
+
+#toc {
+  list-style: circle;
+  list-style-position: inside;
+  color:#605e5c;
+  margin:0 $baseline $baseline 0;
+  font-size: $minussize;
+ 
+  ul {
+    margin-left:1rem;
+    list-style: none;
+  }
+  }
+
+  h3:target {
+        animation: highlight .8s ease-out;
+  }
+
+  @keyframes highlight {
+    0% { background-color: #0078d4; }
+      100% { background-color: transparent; }
+  }
+  
+
+#tax_list {
+grid-column: 2 / -1;
+  list-style: circle;
+  list-style-position: inside;
+  
+  li {
+    margin: $baseline 0;
+  }
+}
+
+#mobile::before {
+  font-family: 'FabricMDL2Icons';
+  content: "\F4E0";
+}
+
+#mobile {
+  display: none;
+}
+
+footer {
+  display:flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+  @include color(background, --first_line,  $theme-light-first_line);
+  @include color(color, --first_line-text,  $theme-light-first_line-text);
+  font-size: $minussize;
+
+  ul {
+    list-style: none;
+    margin:$baseline;
+  }
+
+  img {
+    width:400px;
+  }
+}
+
+@media screen and (max-width: 1024px) {
+
+  #mobile {display: block; @include color(color, --first_line-text,  $theme-light-first_line-text);}
+
+  header {
+  
+  #global_nav {
+    flex-flow:column-reverse nowrap;
+    display: none;
+
+    li {
+      padding:calc(#{$baseline} / 2) 0;
+    }
+  }
+}
+
+.active {
+  border:none;
+}
+
+main {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: flex-start;
+}
+
+section {
+  display: flex;
+  flex-flow: column nowrap;
+}
+
+.service_card {
+  width:calc(100% - #{$baseline} * 4);
+}
+
+aside, section {
+  width:100%;
+  min-height: auto;
+}
+
+#tax_list {
+  display:none;
+}
+
+select {
+  width:calc(100% - #{$baseline} * 2);
+  font-size: $plussize;
+  @include color(background, --bg-color,  $theme-light-bg-color);
+  @include color(color, --first-text-color, $theme-light-first-text-color);}
+
+}
+
+@import "search";
+@import "fabric-icons-inline";

@@ -1,0 +1,106 @@
+{% extends "index.html" %}
+
+{% block title %} {{ config.title }} | {{ section.title }} {% endblock title %}
+
+{% block breadcrumbs %}
+<ul id="breadcrumbs">
+  {% for parent in section.ancestors %}
+      {% set s = get_section(path=parent, include_pages=false) %}
+          <li><a href="{{s.permalink}}">{{s.title}}</a>&nbsp;/&nbsp; </li>
+      {% endfor %}
+          <li>{{ section.title }}</li>
+</ul>
+{% endblock breadcrumbs %}
+
+{% block content %}
+
+    <h1>{{ section.title }}</h1>
+
+{% if section.title == "Services" %}    
+
+    {% set types = get_taxonomy(kind="types") %}
+
+    <ul id="types">
+      {% for type in types.items %}    
+          <script type="text/javascript">
+
+          function check{{ type.name | slugify | replace(from="-", to="") }}() {
+            var checkbox = document.getElementById('{{ type.name | slugify | replace(from="-", to="")}}');
+            let els = document.querySelectorAll('.{{ type.name | slugify | replace(from="-", to="")}}'); 
+            for (var i=0; i<els.length; i++) {
+            if (checkbox.checked != true) {
+              els[i].classList.add('rotate');
+            } else {
+              els[i].classList.remove('rotate');
+            }
+          }}
+          </script>
+
+        <li> <input type="checkbox" onclick="check{{ type.name | slugify | replace(from="-", to="") }}()" id="{{ type.name | slugify | replace(from="-", to="")}}" checked/> 
+          {{type.name}}
+        </li>
+
+      {% endfor %}
+    </ul>
+
+   
+    {% for page in section.pages %}
+      {{ macro::services(page=page) }}
+    {% endfor %}
+
+
+    {% else %}
+   
+        <!-- START ARTICLE FEED !-->
+        {% if paginator %}
+          {{ macro::list_articles(pages=paginator.pages) }}
+          {% else %}
+          {{ macro::list_articles(pages=section.pages) }}
+        {% endif %}
+        <!-- END ARTICLE FEED -->
+        <!-- START PAGINATION -->
+        {% if paginator %}
+          {{ macro::paginate(paginator=paginator) }}
+        {% endif %}
+        <!-- END PAGINATION -->
+    
+      {% endif %}
+          
+{% endblock content %}
+
+{% block aside %}
+<div id="trees">
+
+  {% set types = get_taxonomy(kind="types") %}
+
+  <input class="tree-toggle" type="checkbox" id="tree-toggle-01" />
+  <label class="tree-toggle-label" for="tree-toggle-01">Services by types</label>
+
+  <ul class="subtree">
+     {% for type in types.items %}    
+      <li><a href="{{type.permalink}}">{{type.name}}</a></li> 
+     {% endfor %}
+    </ul>
+
+  {% set products = get_taxonomy(kind="products") %}
+
+  <input class="tree-toggle" type="checkbox" id="tree-toggle-02" />
+  <label class="tree-toggle-label" for="tree-toggle-02">Services by products</label>
+  <ul class="subtree">
+       {% for product in products.items %}    
+       <li><a href="{{product.permalink}}">{{product.name}}</a></li>
+       {% endfor %}
+    </ul>
+
+    {% set tags = get_taxonomy(kind="tags") %}
+
+    <input class="tree-toggle" type="checkbox" id="tree-toggle-03" />
+    <label class="tree-toggle-label" for="tree-toggle-03">Blog tags</label>
+    <ul class="subtree">
+         {% for tag in tags.items %}    
+         <li><a href="{{tag.permalink}}">{{tag.name}}</a></li>
+         {% endfor %}
+      </ul>
+
+  </div>
+{% endblock aside %}
