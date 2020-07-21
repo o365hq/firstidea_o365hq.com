@@ -729,6 +729,10 @@ section {
   flex-flow: column nowrap;
 }
 
+article {
+  width:calc(100% - 1.375rem * 2);
+}
+
 .service_card {
   width:calc(100% - #{$baseline} * 4);
 }
