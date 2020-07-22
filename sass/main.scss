@@ -255,7 +255,7 @@ section {
 
 aside {
   width:20rem;
-  min-height: 80vh;
+  min-height: 85vh;
   @include color(background, --bg-aside,  $theme-light-bg-aside);
   z-index:1;
   position: relative;
@@ -580,6 +580,12 @@ aside {
     font-size:200%;
   }
 
+
+  .windowsserversccm::before {
+    font-family: 'FabricMDL2Icons';
+    content: "\E782"; 
+    font-size:200%;
+  }
 
   .service_card {
     @include color(box-shadow, --shadow, $theme-light-shadow);
